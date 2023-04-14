@@ -7,6 +7,7 @@ function Button({
   success,
   tertiary,
   rounded,
+  danger,
   className,
   ...rest
 }) {
@@ -17,7 +18,8 @@ function Button({
       "border-yellow-400 bg-yellow-400 text-black": primary,
       "border-blue-700 bg-blue-700 text-white": secondary,
       "border-stone-700 bg-transparent text-stone-700": tertiary,
-      "border-green-800 bg-green-800 text-white": success,
+      "border-green-700 bg-green-700 text-white": success,
+      "border-red-600 bg-red-600 text-white": danger,
       "rounded-full": rounded,
     }
   );
@@ -29,11 +31,12 @@ function Button({
 }
 
 Button.propTypes = {
-  checkVariation: ({ primary, secondary, success, tertiary }) => {
+  checkVariation: ({ primary, secondary, success, danger, tertiary }) => {
     const count =
       Number(!!primary) +
       Number(!!secondary) +
       Number(!!tertiary) +
+      Number(!!danger) +
       Number(!!success);
     if (count > 1)
       return new Error("Only one of primary, secondary or success can be true");

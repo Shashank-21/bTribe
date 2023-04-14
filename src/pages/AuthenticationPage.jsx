@@ -11,6 +11,7 @@ function DashboardPage() {
 
   const userData = useSelector((state) => state.user.data);
   console.log(userData);
+
   const [doAuthenticateUser, authenticateUserLoading, authenticateUserError] =
     useThunk(authCheck);
 
@@ -20,9 +21,10 @@ function DashboardPage() {
         userId: userData?.user._id,
         token: userData?.token,
       });
-
+      localStorage.setItem("user", JSON.stringify(userData));
       navigate(`/dashboard/${userData?.user._id}`);
     }, 1500);
+
     return () => {
       clearTimeout(interval);
     };
@@ -43,13 +45,18 @@ function DashboardPage() {
           <p className='text-4xl font-semibold text-stone-700'>
             Error Authenticating User
           </p>
-          <Button
-            secondary
-            className='my-5 mx-auto'
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </Button>
+          <div className='flex flex-row items-center justify-center my-5'>
+            <Button
+              secondary
+              className='mr-5'
+              onClick={() => navigate("/mentor/login")}
+            >
+              Are you a mentor?
+            </Button>
+            <Button secondary onClick={() => navigate("/student/login")}>
+              Are you a student?
+            </Button>
+          </div>
         </div>
       </div>
     );

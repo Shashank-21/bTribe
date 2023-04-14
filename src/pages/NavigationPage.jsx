@@ -11,10 +11,7 @@ function NavigationPage() {
   useEffect(() => {
     if (location.pathname === "/") {
       setShowFooter(false);
-    } else if (
-      window.location.host.includes("student") ||
-      window.location.host.includes("mentor")
-    ) {
+    } else if (location.pathname.includes("dashboard")) {
       setShowFooter(false);
     } else {
       setShowFooter(true);
@@ -22,6 +19,7 @@ function NavigationPage() {
   }, [location]);
 
   const links = [
+    { path: "/mentor/register", name: "Become a Mentor" },
     { path: "/about", name: "About" },
     { path: "/courses", name: "Catalog" },
   ];

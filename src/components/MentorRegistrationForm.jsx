@@ -7,11 +7,14 @@ import Button from "../components/Button";
 import CheckboxInput from "./CheckboxInput";
 
 function MentorRegistrationForm({ user, role, courses }) {
-  const { user: data } = user;
+  const data = user?.user;
+  console.log(role);
   const navigate = useNavigate();
   const [doUpdateUser, updateUserLoading, updateUserError] =
     useThunk(updateUser);
   const [phone, setPhone] = useState("");
+  const [institute, setInstitute] = useState("");
+  const [company, setCompany] = useState("");
   const [error, setError] = useState(false);
   const [selectedCourses, setSelectedCourses] = useState({
     stem: "Select the courses you want to take",
@@ -28,6 +31,12 @@ function MentorRegistrationForm({ user, role, courses }) {
     if (phone.match(regExpPhone)) {
       setError(false);
     }
+  };
+  const handleInstituteChange = (event) => {
+    setInstitute(event.target.value);
+  };
+  const handleCompanyChange = (event) => {
+    setCompany(event.target.value);
   };
 
   const handleSelectedCourseChange = (event) => {
@@ -54,6 +63,7 @@ function MentorRegistrationForm({ user, role, courses }) {
     event.preventDefault();
     if (!phone.match(regExpPhone)) {
       setError(true);
+      console.log("something is wrong");
     } else {
       const registerData = {
         _id: data._id,
@@ -65,16 +75,21 @@ function MentorRegistrationForm({ user, role, courses }) {
             selectedCourses.selectedOptions.includes(course.name)
           )
           .map((course) => course._id),
+        institute,
+        company,
       };
 
       doUpdateUser(registerData);
+
       if (updateUserLoading) {
         console.log("Updating User");
       } else if (updateUserError) {
         console.log("Error!");
       } else {
-        navigate(`/dashboard/${data._id}`);
         console.log("something");
+        setTimeout(() => {
+          navigate(`/dashboard/${data._id}`);
+        }, 1000);
       }
     }
   };
@@ -98,6 +113,20 @@ function MentorRegistrationForm({ user, role, courses }) {
         onChange={handlePhoneChange}
         className={`w-5/6 h-12 mt-3 px-3 rounded-lg shadow-md bg-white placeholder:${formPlaceholderColor} ${textColor}`}
       />
+      <input
+        type='text'
+        value={institute}
+        placeholder='Where did you do your MBA?'
+        onChange={handleInstituteChange}
+        className={`w-5/6 h-12 mt-3 px-3 rounded-lg shadow-md bg-white placeholder:${formPlaceholderColor} ${textColor}`}
+      />
+      <input
+        type='text'
+        value={company}
+        placeholder='Which company did/do you work in?'
+        onChange={handleCompanyChange}
+        className={`w-5/6 h-12 mt-3 px-3 rounded-lg shadow-md bg-white placeholder:${formPlaceholderColor} ${textColor}`}
+      />
       {error && !phone.match(regExpPhone) && (
         <p className='text-md md:text-lg text-red-600'>
           Valid Phone Number Formats:
@@ -116,7 +145,7 @@ function MentorRegistrationForm({ user, role, courses }) {
         onInputChange={handleSelectedCourseChange}
         className='w-5/6 mt-3 px-3'
       />
-      <Button secondary className='mt-5'>
+      <Button primary className='mt-5'>
         Create Profile
       </Button>
     </form>

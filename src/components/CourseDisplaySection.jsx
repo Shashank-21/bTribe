@@ -1,32 +1,25 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useThunk } from "../hooks/use-thunk";
+import { changeSelectedVariant, createOrder } from "../store";
 import Button from "./Button";
 
 function CourseDisplaySection({ course }) {
+  const dispatch = useDispatch();
   const { variants } = course;
+  const navigate = useNavigate();
   const { cardHeadingBgColor, cardBgColor } = useSelector(
     (state) => state.color
   );
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
-
-  let middlePart = window.location.host;
-  if (window.location.host.split(".")[0] === "student") {
-    middlePart = window.location.host;
-  } else if (
-    window.location.host.split(".")[0] === "mentor" ||
-    window.location.host.split(".")[0] === "admin"
-  ) {
-    const tempArray = window.location.host.split(".");
-    tempArray.shift();
-    middlePart = `student.${tempArray.join(".")}`;
-  } else {
-    middlePart = `student.${window.location.host}`;
-  }
-
-  const studentRegisterLink = `${window.location.protocol}//${middlePart}/register`;
-
+  const [doCreateOrder, createOrderPending, createOrderError] =
+    useThunk(createOrder);
   const handleEnrollClick = () => {
-    window.location.href = studentRegisterLink;
+    dispatch(changeSelectedVariant(selectedVariant));
+    localStorage.setItem("selectedCourse", JSON.stringify(selectedVariant));
+    doCreateOrder(selectedVariant?.variantCost);
+    navigate("/payments");
   };
 
   return (
@@ -83,14 +76,27 @@ function CourseDisplaySection({ course }) {
             );
           })}
         </ul>
+        <p className='mt-5 text-xl font-semibold'>
+          Investment: INR {selectedVariant?.variantCost} only
+        </p>
         <Button
-          secondary
+          primary
           className='my-10 mx-auto text-xl'
           onClick={handleEnrollClick}
         >
           Enroll Now
         </Button>
       </div>
+      {createOrderPending && (
+        <p className='mt-5 text-xl font-semibold text-stone-700'>
+          Creating Order
+        </p>
+      )}
+      {createOrderError && (
+        <p className='mt-5 text-xl font-semibold text-red-700'>
+          Error creating Order
+        </p>
+      )}
     </div>
   );
 }

@@ -6,13 +6,15 @@ import { createSlot } from "../store";
 import MentorSlot from "./MentorSlot";
 
 function MentorSlotForm({ mentor, mentorSlots, doListAllSlots }) {
-  const dateVariable = new Date();
+  const [dateError, setDateError] = useState("");
   const [dateSelected, setDateSelected] = useState(
-    dateVariable.toISOString().substring(0, 10)
+    new Date().toISOString().substring(0, 10)
   );
   const [timeSelected, setTimeSelected] = useState(
-    dateVariable.toTimeString().substring(0, 5)
+    new Date().toTimeString().substring(0, 5)
   );
+  const dateVariable = new Date(`${dateSelected}T${timeSelected}`);
+  console.log(dateVariable);
 
   const [doCreateSlot, createSlotLoading, createSlotError] =
     useThunk(createSlot);
@@ -22,15 +24,29 @@ function MentorSlotForm({ mentor, mentorSlots, doListAllSlots }) {
     dateVariable.setFullYear(splitDate[0]);
     dateVariable.setMonth(parseInt(splitDate[1]) - 1);
     dateVariable.setDate(splitDate[2]);
-    setDateSelected(dateVariable.toISOString().substring(0, 10));
+    const instance = new Date();
+    if (instance.getTime() >= dateVariable.getTime()) {
+      setDateError("You cannot select a date and time from the past");
+      setDateSelected(instance.toISOString().substring(0, 10));
+    } else {
+      setDateError("");
+      setDateSelected(dateVariable.toISOString().substring(0, 10));
+    }
   };
   const handleTimeChange = (event) => {
     const [hours, minutes] = event.target.value.split(":");
     dateVariable.setHours(hours);
     dateVariable.setMinutes(minutes);
-    setTimeSelected(dateVariable.toTimeString().substring(0, 5));
-    // setTime(event.target.value);
+    const instance = new Date();
+    if (instance.getTime() >= dateVariable.getTime()) {
+      setDateError("You cannot select a date and time from the past");
+      setDateSelected(instance.toISOString().substring(0, 10));
+    } else {
+      setDateError("");
+      setTimeSelected(dateVariable.toTimeString().substring(0, 5));
+    }
   };
+
   const { dashboardCardBgColor, headingColor } = useSelector(
     (state) => state.color
   );
@@ -46,7 +62,7 @@ function MentorSlotForm({ mentor, mentorSlots, doListAllSlots }) {
     doCreateSlot(slotDetails);
     setTimeout(() => {
       doListAllSlots(mentor.token);
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -62,47 +78,69 @@ function MentorSlotForm({ mentor, mentorSlots, doListAllSlots }) {
         className='flex flex-row justify-evenly items-center px-10 py-5'
         onSubmit={handleSlotRelease}
       >
-        <input
-          type='date'
-          value={dateSelected}
-          onChange={handleDateChange}
-          className={`text-xl px-5 py-3 rounded-lg `}
-        />
-        <input
-          type='time'
-          value={timeSelected}
-          onChange={handleTimeChange}
-          className={`text-xl px-5 py-3 rounded-lg w-fit`}
-        />
-        <Button secondary>Release Slot</Button>
+        <div className='flex flex-row justify-start items-center'>
+          <label className='text-xl mr-3'>Date:</label>
+          <input
+            type='date'
+            value={dateSelected}
+            onChange={handleDateChange}
+            className={`text-xl px-5 py-3 rounded-lg `}
+          />
+        </div>
+        <div className='flex flex-row justify-start items-center'>
+          <label className='text-xl mr-3'>Time:</label>
+          <input
+            type='time'
+            value={timeSelected}
+            onChange={handleTimeChange}
+            className={`text-xl px-5 py-3 rounded-lg w-fit`}
+          />
+        </div>
+        <Button primary>Release Slot</Button>
       </form>
       {createSlotLoading && (
-        <p className='text-green-600 text-lg my-2'>Creating a slot</p>
+        <p className='text-green-600 text-lg my-2 mx-auto'>Creating a slot</p>
       )}
       {createSlotError && (
-        <p className='text-red-600 text-lg my-2'>
+        <p className='text-red-600 text-lg my-2 mx-auto'>
           Error creating slot. Try again
         </p>
       )}
+      {dateError && (
+        <p className='text-red-600 text-lg my-2 mx-auto'>{dateError}</p>
+      )}
       {dateSelected && (
         <>
-          <h3 className='my-3 text-xl font-semibold text-center'>
-            Slots Released for selected date:
-          </h3>
-          <div className='flex flex-row flex-wrap items-center justify-center w-full my-5'>
-            {mentorSlots
-              ?.filter((slot) => slot.date === dateSelected)
-              .map((slot, index) => {
-                return (
-                  <MentorSlot
-                    slot={slot}
-                    key={index}
-                    mentor={mentor}
-                    doListAllSlots={doListAllSlots}
-                  />
-                );
-              })}
-          </div>
+          {mentorSlots?.filter((slot) => slot.date === dateSelected).length >
+            0 && (
+            <>
+              <h3 className='mt-10 text-xl font-semibold text-center'>
+                Slots Released for {new Date(dateSelected).toLocaleDateString()}
+                :
+              </h3>
+              <div className='flex flex-row flex-wrap items-center justify-center w-full mt-3 mb-10'>
+                {mentorSlots
+                  ?.filter((slot) => slot.date === dateSelected)
+                  .map((slot, index) => {
+                    return (
+                      <MentorSlot
+                        slot={slot}
+                        key={index}
+                        mentor={mentor}
+                        doListAllSlots={doListAllSlots}
+                      />
+                    );
+                  })}
+              </div>
+            </>
+          )}
+          {mentorSlots?.filter((slot) => slot.date === dateSelected).length ===
+            0 && (
+            <p className='text-xl font-semibold text-stone-400 mx-auto my-10'>
+              There are no slots released on{" "}
+              {new Date(dateSelected).toLocaleDateString()}
+            </p>
+          )}
         </>
       )}
     </div>

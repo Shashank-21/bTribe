@@ -7,6 +7,12 @@ const coursesSlice = createSlice({
     data: [],
     isLoading: false,
     error: null,
+    selectedVariant: null,
+  },
+  reducers: {
+    changeSelectedVariant(state, action) {
+      state.selectedVariant = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -35,6 +41,5 @@ const coursesSlice = createSlice({
   },
 });
 
-export const { addCourse, removeCourse, updateCourse, changeSelectedVariant } =
-  coursesSlice.actions;
+export const { changeSelectedVariant } = coursesSlice.actions;
 export const coursesReducer = coursesSlice.reducer;

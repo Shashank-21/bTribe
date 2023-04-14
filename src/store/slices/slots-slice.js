@@ -7,6 +7,16 @@ import {
   joinSlotWaitlist,
   deleteSlot,
   listAllSlots,
+  updateSlotStatus,
+  overrideSlotStatus,
+  updatePastSlotsStudent,
+  updatePastSlotsMentor,
+  cancelSlotBookingStudent,
+  handleFeedback,
+  handleFeedbackApproval,
+  slotRefundRequestHandler,
+  slotRefundRequestApprovalHandler,
+  dropOffWaitList,
 } from "../thunks/slots-thunk";
 
 const slotsSlice = createSlice({
@@ -21,6 +31,12 @@ const slotsSlice = createSlice({
     slotCreated: null,
     slotDeleted: null,
     slotUpdated: null,
+    rating: 0,
+  },
+  reducers: {
+    changeRating(state, action) {
+      state.rating = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -100,8 +116,119 @@ const slotsSlice = createSlice({
       .addCase(listAllSlots.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
+      })
+      .addCase(updateSlotStatus.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updateSlotStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(updateSlotStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(overrideSlotStatus.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(overrideSlotStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(overrideSlotStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(updatePastSlotsStudent.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updatePastSlotsStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.pastUpdateStatus = action.payload.updated;
+      })
+      .addCase(updatePastSlotsStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(updatePastSlotsMentor.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updatePastSlotsMentor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.pastUpdateStatus = action.payload.updated;
+      })
+      .addCase(updatePastSlotsMentor.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(cancelSlotBookingStudent.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(cancelSlotBookingStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(cancelSlotBookingStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(handleFeedback.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(handleFeedback.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(handleFeedback.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(handleFeedbackApproval.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(handleFeedbackApproval.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(handleFeedbackApproval.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(slotRefundRequestHandler.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(slotRefundRequestHandler.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(slotRefundRequestHandler.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(slotRefundRequestApprovalHandler.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(slotRefundRequestApprovalHandler.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(slotRefundRequestApprovalHandler.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(dropOffWaitList.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(dropOffWaitList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.slotUpdated = action.payload;
+      })
+      .addCase(dropOffWaitList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
       });
   },
 });
 
+export const { changeRating } = slotsSlice.actions;
 export const slotsReducer = slotsSlice.reducer;

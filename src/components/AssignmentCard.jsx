@@ -25,9 +25,10 @@ function AssignmentCard() {
         )}
       </div>
       {isOpen && (
-        <div className={`my-10 mx-auto text-3xl w-4/5 font-semibold text-stone-400`}>
-          Previous Assignments <br /> <br />
-          Upcoming assignments with a submit button
+        <div
+          className={`my-10 mx-auto text-3xl w-4/5 font-semibold text-stone-400`}
+        >
+          Assignment Submission Form Link
         </div>
       )}
     </div>

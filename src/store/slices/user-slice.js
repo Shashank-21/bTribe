@@ -7,6 +7,14 @@ import {
   updateUser,
   authCheck,
   listMentors,
+  mentorApprovalCheck,
+  listPendingApprovalUsers,
+  approveUserRole,
+  createOrder,
+  verifyPaymentSignature,
+  resetPasswordRequest,
+  resetPasswordVerify,
+  resetPassword,
 } from "../thunks/user-thunk";
 
 const userSlice = createSlice({
@@ -18,10 +26,14 @@ const userSlice = createSlice({
     deletedUser: null,
     authenticateUser: false,
     mentors: null,
+    userApprovalsPending: null,
+    approvedUser: null,
+    createdOrder: null,
+    paymentVerified: null,
   },
   reducers: {
-    storeDetails(state, action) {
-      return { ...state, userDetails: action.payload };
+    storeUser(state, action) {
+      return { ...state, data: action.payload };
     },
   },
   extraReducers(builder) {
@@ -103,9 +115,98 @@ const userSlice = createSlice({
       .addCase(listMentors.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
+      })
+      .addCase(mentorApprovalCheck.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(mentorApprovalCheck.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authenticateUser = action.payload.ok;
+      })
+      .addCase(mentorApprovalCheck.rejected, (state, action) => {
+        state.loading = false;
+        state.authenticateUser = false;
+        state.error = action.error;
+      })
+      .addCase(listPendingApprovalUsers.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(listPendingApprovalUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userApprovalsPending = action.payload;
+      })
+      .addCase(listPendingApprovalUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(approveUserRole.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(approveUserRole.fulfilled, (state, action) => {
+        state.loading = false;
+        state.approvedUser = action.payload;
+      })
+      .addCase(approveUserRole.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(createOrder.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.createdOrder = action.payload;
+      })
+      .addCase(createOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(verifyPaymentSignature.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(verifyPaymentSignature.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paymentVerified = action.payload;
+      })
+      .addCase(verifyPaymentSignature.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(resetPasswordRequest.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(resetPasswordRequest.fulfilled, (state, action) => {
+        state.loading = false;
+        state.resetRequestStatus = action.payload.email;
+      })
+      .addCase(resetPasswordRequest.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(resetPasswordVerify.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(resetPasswordVerify.fulfilled, (state, action) => {
+        state.loading = false;
+        state.resetPasswordEmail = action.payload.email;
+      })
+      .addCase(resetPasswordVerify.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(resetPassword.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.resetPasswordStatus = action.payload;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
       });
   },
 });
 
-export const { storeDetails } = userSlice.actions;
+export const { storeUser } = userSlice.actions;
 export const userReducer = userSlice.reducer;

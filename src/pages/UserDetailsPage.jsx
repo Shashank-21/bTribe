@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import AdminRegistrationForm from "../components/AdminRegistrationForm";
 import MentorRegistrationForm from "../components/MentorRegistrationForm";
-import StudentRegistrationForm from "../components/StudentRegistrationForm";
 import { useThunk } from "../hooks/use-thunk";
 import { fetchGoogleUser } from "../store";
 
@@ -12,30 +11,18 @@ function UserDetailsPage() {
 
   const { data: courses } = useSelector((state) => state.courses);
 
-  const variants = courses
-    .map((course) => {
-      return course.variants.map((variant) => {
-        return { ...variant, courseName: course.name };
-      });
-    })
-    .reduce((variants, variant) => {
-      return [...variants, ...variant];
-    }, [])
-    .map((variant) => {
-      return {
-        ...variant,
-        label: `${variant.courseName}-${variant.name} course`,
-      };
-    });
-  console.log(variants);
+  const userData = useSelector((state) => state.user.data);
 
-  const { data } = useSelector((state) => state.user);
+  const roles = ["student", "mentor", "admin"];
+  const [role, setRole] = useState(roles[0]);
+  console.log(role);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
+    setRole(urlParams.get("role"));
     const interval = setTimeout(() => {
       doFetchGoogleUser({
-        role: window.location.host.split(".")[0],
+        role: urlParams.get("role"),
         access_token: urlParams.get("access_token"),
       });
     }, 1000);
@@ -44,19 +31,20 @@ function UserDetailsPage() {
     };
   }, [doFetchGoogleUser]);
 
-  console.log(data);
-
-  const roles = ["student", "mentor", "admin"];
-  const role = roles.indexOf(window.location.host.split(".")[0]);
+  console.log(userData);
 
   let formToRender;
-  if (!role) {
+  if (role === "mentor") {
     formToRender = (
-      <StudentRegistrationForm user={data} role={role} courses={variants} />
+      <MentorRegistrationForm
+        user={userData}
+        role={roles.indexOf(role)}
+        courses={courses}
+      />
     );
-  } else {
+  } else if (role === "admin") {
     formToRender = (
-      <MentorRegistrationForm user={data} role={role} courses={courses} />
+      <AdminRegistrationForm user={userData} role={roles.indexOf(role)} />
     );
   }
 
@@ -72,7 +60,7 @@ function UserDetailsPage() {
         Error Loading user
       </div>
     );
-  } else if (data) {
+  } else {
     return <div className='h-screen'>{formToRender}</div>;
   }
 }

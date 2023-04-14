@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useThunk } from "../hooks/use-thunk";
+import { changeSelectedVariant, createOrder } from "../store";
 import Button from "./Button";
 
 function CourseCard({ course }) {
-  const variants = course.variants.map((variant) => {
-    return { ...variant, courseName: course.name };
-  });
-  const [selectedVariant, setSelectedVariant] = useState(variants[0]);
+  const [selectedVariant, setSelectedVariant] = useState(course.variants[0]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     cardHeadingBgColor,
     cardBgColor,
@@ -18,28 +18,18 @@ function CourseCard({ course }) {
     optionBgColor,
   } = useSelector((state) => state.color);
 
+  const [doCreateOrder, createOrderPending, createOrderError] =
+    useThunk(createOrder);
+
   const handleCourseCardClick = () => {
     navigate(`/courses/${course.slug}`);
   };
 
-  let middlePart = window.location.host;
-  if (window.location.host.split(".")[0] === "student") {
-    middlePart = window.location.host;
-  } else if (
-    window.location.host.split(".")[0] === "mentor" ||
-    window.location.host.split(".")[0] === "admin"
-  ) {
-    const tempArray = window.location.host.split(".");
-    tempArray.shift();
-    middlePart = `student.${tempArray.join(".")}`;
-  } else {
-    middlePart = `student.${window.location.host}`;
-  }
-
-  const studentRegisterLink = `${window.location.protocol}//${middlePart}/register`;
-
   const handleRegisterClick = () => {
-    window.location.href = studentRegisterLink;
+    dispatch(changeSelectedVariant(selectedVariant));
+    localStorage.setItem("selectedCourse", JSON.stringify(selectedVariant));
+    doCreateOrder(selectedVariant?.variantCost);
+    navigate("/payments");
   };
 
   return (
@@ -51,9 +41,9 @@ function CourseCard({ course }) {
       >
         {course.name}
       </h3>
-      {variants.length > 1 && (
+      {course.variants.length > 1 && (
         <div className='w-full flex flex-row justify-start items-center h-fit'>
-          {variants.map((courseVariant, index) => {
+          {course.variants.map((courseVariant, index) => {
             return (
               <h5
                 className={`text-lg text-center py-3 ${
@@ -87,12 +77,22 @@ function CourseCard({ course }) {
         </p>
       </div>
       <Button
-        secondary
-        className='text-lg my-10 w-2/3 mx-auto'
+        primary
+        className='text-lg my-10 w-1/2   mx-auto'
         onClick={handleRegisterClick}
       >
         Enroll Now
       </Button>
+      {createOrderPending && (
+        <p className='my-5 text-xl font-semibold text-stone-700'>
+          Creating Order
+        </p>
+      )}
+      {createOrderError && (
+        <p className='my-5 text-xl font-semibold text-red-700'>
+          Error creating Order
+        </p>
+      )}
     </div>
   );
 }

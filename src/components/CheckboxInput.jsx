@@ -4,16 +4,14 @@ function CheckboxInput({ question, onInputChange, className, entryError }) {
   const { stem, options, selectedOptions } = question;
   const appliedClass = className;
 
-  const { formBgColor, headingColor, textColor } = useSelector(
-    (state) => state.color
-  );
+  const { headingColor, textColor } = useSelector((state) => state.color);
 
   return (
     <div
-      className={`flex flex-col justify-around items-start rounded-lg p-5 ${appliedClass} ${formBgColor}`}
+      className={`flex flex-col justify-around items-start rounded-lg p-5 ${appliedClass} bg-inherit`}
     >
       <p
-        className={`text-xl md:text-2xl mb-5 w-full text-left ${headingColor} font-bold-inline`}
+        className={`text-xl mb-5 w-full text-left ${headingColor} font-bold-inline`}
       >
         {question.stem}
       </p>

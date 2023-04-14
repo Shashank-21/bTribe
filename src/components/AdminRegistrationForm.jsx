@@ -3,20 +3,16 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useThunk } from "../hooks/use-thunk";
 import { updateUser } from "../store";
-import Button from "../components/Button";
-import Dropdown from "./Dropdown";
+import Button from "./Button";
 
-function StudentRegistrationForm({ user, role, courses }) {
-  const { user: data } = user;
-  console.log(courses);
+function AdminRegistrationForm({ user, role }) {
+  const data = user?.user;
   const navigate = useNavigate();
   const [doUpdateUser, updateUserLoading, updateUserError] =
     useThunk(updateUser);
   const [phone, setPhone] = useState("");
   const [error, setError] = useState(false);
-  const [selectedVariant, setSelectedVariant] = useState(
-    courses[0] || { label: "", data: "Something" }
-  );
+
   const regExpPhone = /(\+[0-9]{1,3}-)?\(?[0-9]{3}\)?-?[0-9]{3}-?[0-9]{4}/;
   const { formBgColor, formPlaceholderColor, textColor } = useSelector(
     (state) => state.color
@@ -33,26 +29,22 @@ function StudentRegistrationForm({ user, role, courses }) {
     event.preventDefault();
     if (!phone.match(regExpPhone)) {
       setError(true);
-    } else if (!selectedVariant._id) {
-      setError(true);
     } else {
       const registerData = {
         _id: data._id,
         name: data.name,
         phone,
         role,
-        courses: [selectedVariant._id],
-        maxCourseSlots: [selectedVariant.maxSlots],
-        paymentStatus: "pending",
       };
+
       doUpdateUser(registerData);
       if (updateUserLoading) {
         console.log("Updating User");
       } else if (updateUserError) {
         console.log("Error!");
       } else {
-        console.log("success!");
-        navigate("/payments");
+        navigate(`/dashboard/${data._id}`);
+        console.log("something");
       }
     }
   };
@@ -62,6 +54,7 @@ function StudentRegistrationForm({ user, role, courses }) {
       onSubmit={handleSubmit}
     >
       <h3 className='text-xl font-semibold mt-3'>Just a few more details!</h3>
+
       <div className='w-5/6 h-12 mt-3 px-3 flex flex-row justify-start items-center text-stone-400 rounded-lg bg-stone-100'>
         {data?.name}
       </div>
@@ -88,21 +81,10 @@ function StudentRegistrationForm({ user, role, courses }) {
           [+Country Code]-(XXX)-XXX-XXXX
         </p>
       )}
-      <Dropdown
-        prompt='Select a Course'
-        options={courses}
-        selectedOption={selectedVariant}
-        setSelectedOption={setSelectedVariant}
-      />{" "}
-      {error && !selectedVariant._id && (
-        <p className='text-md md:text-lg text-red-600'>
-          You must select a course!
-        </p>
-      )}
-      <Button secondary className='mt-5'>
+      <Button primary className='mt-5'>
         Create Profile
       </Button>
     </form>
   );
 }
-export default StudentRegistrationForm;
+export default AdminRegistrationForm;

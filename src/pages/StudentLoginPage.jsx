@@ -5,44 +5,27 @@ import Button from "../components/Button";
 import { useThunk } from "../hooks/use-thunk";
 import { loginUser } from "../store";
 
-function LoginPage() {
+function StudentLoginPage() {
   const { formBgColor, formPlaceholderColor, textColor, headingColor } =
     useSelector((state) => state.color);
   const navigate = useNavigate();
-  const { data } = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [doLoginUser, loginUserLoading, loginUserError] = useThunk(loginUser);
 
-  const tempArray = window.location.host.split(".");
-  const userType = tempArray.shift();
-  const studentLoginLink = `${
-    window.location.protocol
-  }//student.${tempArray.join(".")}/login`;
-  const mentorLoginLink = `${window.location.protocol}//mentor.${tempArray.join(
-    "."
-  )}/login`;
-
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    doLoginUser(email, password);
+
+    doLoginUser({ email, password });
     if (loginUserLoading) {
       console.log("Logging in");
     } else if (loginUserError) {
       console.log("Error Logging user in");
-    } else if (data) {
-      console.log("Login success");
-      navigate("/dashboard");
     }
+    navigate("/dashboard/auth");
   };
-  const handleGoogleLoginMentor = () => {
-    try {
-      window.location.href = "http://localhost:8000/api/login/google/mentor";
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   const handleGoogleLoginStudent = () => {
     try {
       window.location.href = "http://localhost:8000/api/login/google/student";
@@ -80,45 +63,37 @@ function LoginPage() {
           className={`w-5/6 h-12 my-3 px-3 rounded-lg shadow-md bg-white placeholder:${formPlaceholderColor} ${textColor}`}
         />
 
-        <Button primary className='my-5'>
+        <Button tertiary className='my-5'>
           Sign In
         </Button>
       </form>
       <h4 className='text-xl font-semibold'>OR</h4>
-      <Button secondary className='my-5' onClick={handleGoogleLoginStudent}>
+      <Button primary className='my-5' onClick={handleGoogleLoginStudent}>
         Sign In with Google
       </Button>
-      <p className='mt-3'>
-        Are you a mentor?{" "}
-        <a className='underline text-blue-700' href={mentorLoginLink}>
-          Click Here
-        </a>
-      </p>
-    </div>
-  );
-  const mentorLoginForm = (
-    <div className='flex flex-col justify-around items-center'>
-      <Button
-        secondary
-        className='mx-auto mt-96'
-        onClick={handleGoogleLoginMentor}
+      <p
+        className='my-5 underline text-blue-600 cursor-pointer'
+        onClick={() => {
+          navigate("/reset-password-request");
+        }}
       >
-        Sign In with Google
-      </Button>
-      <p className='mt-3'>
-        Are you a student?{" "}
-        <a className='underline text-blue-700' href={studentLoginLink}>
-          Click Here
-        </a>
+        Forgot Password
+      </p>
+      <p className='my-5'>
+        Are you a mentor?{" "}
+        <span
+          className='underline text-blue-600 cursor-pointer'
+          onClick={() => {
+            navigate("/mentor/login");
+          }}
+        >
+          Click here
+        </span>
       </p>
     </div>
   );
 
-  if (userType === "mentor") {
-    return mentorLoginForm;
-  } else if (userType === "student") {
-    return studentLoginForm;
-  }
+  return studentLoginForm;
 }
 
-export default LoginPage;
+export default StudentLoginPage;

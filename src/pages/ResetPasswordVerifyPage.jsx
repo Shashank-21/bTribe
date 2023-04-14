@@ -1,50 +1,46 @@
-//logic for only fetching google user
+//logic for authentication.
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { useThunk } from "../hooks/use-thunk";
-import { fetchGoogleUser } from "../store";
+import { resetPasswordVerify } from "../store";
 
-function FetchGoogleUserPage() {
+function ResetPasswordVerifyPage() {
   const navigate = useNavigate();
 
-  const [doFetchGoogleUser, fetchGoogleUserLoading, fetchGoogleUserError] =
-    useThunk(fetchGoogleUser);
-
-  const loginRole = useSelector((state) => state.user.loginRole);
-  const userData = useSelector((state) => state.user.data);
-  console.log(userData);
+  const [doAuthenticateUser, authenticateUserLoading, authenticateUserError] =
+    useThunk(resetPasswordVerify);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    if (!token) {
+      navigate("/");
+    }
     const interval = setTimeout(() => {
-      doFetchGoogleUser({
-        role: urlParams.get("role"),
-        access_token: urlParams.get("access_token"),
-      });
-
-      navigate("/dashboard/auth");
+      doAuthenticateUser(token);
+      navigate("verified");
     }, 1500);
+
     return () => {
       clearTimeout(interval);
     };
-  }, [doFetchGoogleUser, loginRole, navigate]);
+  }, [navigate, doAuthenticateUser]);
 
-  if (fetchGoogleUserLoading) {
+  if (authenticateUserLoading) {
     return (
       <div className='h-screen flex flex-col items-center justify-center'>
         <p className='shadow-xl w-fit p-10 text-4xl font-semibold text-stone-700 bg-stone-300 rounded-xl'>
-          Loading data
+          Verifying Request
         </p>
       </div>
     );
-  } else if (fetchGoogleUserError) {
+  } else if (authenticateUserError) {
     return (
       <div className='h-screen flex flex-col items-center justify-center'>
         <div className='shadow-xl w-fit p-10  bg-stone-300 rounded-xl'>
           <p className='text-4xl font-semibold text-stone-700'>
-            Error Authenticating User
+            Error Verifying Request
           </p>
           <div className='flex flex-row items-center justify-center my-5'>
             <Button
@@ -64,4 +60,4 @@ function FetchGoogleUserPage() {
   }
 }
 
-export default FetchGoogleUserPage;
+export default ResetPasswordVerifyPage;

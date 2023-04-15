@@ -199,7 +199,7 @@ const userSlice = createSlice({
       })
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.resetPasswordStatus = action.payload;
+        state.resetPasswordStatus = action.payload.status;
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;

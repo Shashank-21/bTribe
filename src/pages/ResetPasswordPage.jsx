@@ -16,7 +16,7 @@ function ResetPasswordPage() {
   const [message, setMessage] = useState("");
 
   const email = useSelector((state) => state.user.resetPasswordEmail);
-  console.log(email);
+  //console.log(email);
 
   const [doResetPassword, resetPasswordLoading, resetPasswordError] =
     useThunk(resetPassword);

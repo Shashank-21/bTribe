@@ -39,7 +39,7 @@ export const updateUser = createAsyncThunk("users/update", async (data) => {
     `${import.meta.env.VITE_AXIOS_BASE_URL}/user/${data._id}`,
     data
   );
-  console.log(response.data);
+  //console.log(response.data);
   return response.data;
 });
 

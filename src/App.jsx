@@ -31,7 +31,7 @@ import ResetPasswordSuccessPage from "./pages/ResetPasswordSuccessPage";
 
 function App() {
   const courses = useSelector((state) => state.courses);
-  console.log(window);
+  //console.log(window);
   const [doFetchCourses] = useThunk(fetchCourses);
   const dispatch = useDispatch();
   useEffect(() => {

@@ -26,8 +26,8 @@ function MentorSlotBookingCard({
     (state) => state.color
   );
 
-  console.log(selectedSlot);
-  console.log(student);
+  //console.log(selectedSlot);
+  //console.log(student);
   const [doBookSlot, bookSlotLoading, bookSlotError] = useThunk(bookSlot);
 
   const [doJoinSlotWaitlist, joinSlotWaitlistLoading, joinSlotWaitlistError] =

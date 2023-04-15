@@ -46,8 +46,8 @@ function DashboardPage() {
         })
       : [];
 
-  console.log(studentSlots);
-  console.log(mentorSlots);
+  //console.log(studentSlots);
+  //console.log(mentorSlots);
 
   let dashboardToDisplay;
 

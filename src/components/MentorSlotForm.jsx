@@ -14,7 +14,7 @@ function MentorSlotForm({ mentor, mentorSlots, doListAllSlots }) {
     new Date().toTimeString().substring(0, 5)
   );
   const dateVariable = new Date(`${dateSelected}T${timeSelected}`);
-  console.log(dateVariable);
+  //console.log(dateVariable);
 
   const [doCreateSlot, createSlotLoading, createSlotError] =
     useThunk(createSlot);

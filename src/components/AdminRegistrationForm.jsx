@@ -39,12 +39,12 @@ function AdminRegistrationForm({ user, role }) {
 
       doUpdateUser(registerData);
       if (updateUserLoading) {
-        console.log("Updating User");
+        //console.log("Updating User");
       } else if (updateUserError) {
-        console.log("Error!");
+        //console.log("Error!");
       } else {
         navigate(`/dashboard/${data._id}`);
-        console.log("something");
+        //console.log("something");
       }
     }
   };

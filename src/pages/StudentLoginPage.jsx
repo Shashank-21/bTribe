@@ -19,9 +19,9 @@ function StudentLoginPage() {
 
     doLoginUser({ email, password });
     if (loginUserLoading) {
-      console.log("Logging in");
+      //console.log("Logging in");
     } else if (loginUserError) {
-      console.log("Error Logging user in");
+      //console.log("Error Logging user in");
     }
     navigate("/dashboard/auth");
   };
@@ -32,7 +32,7 @@ function StudentLoginPage() {
         import.meta.env.VITE_AXIOS_BASE_URL
       }/login/google/student`;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
   const handleEmailChange = (event) => {

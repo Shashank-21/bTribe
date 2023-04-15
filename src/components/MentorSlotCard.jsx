@@ -10,7 +10,7 @@ function MentorSlotCard({ mentor, mentorSlots, doListAllSlots }) {
     (state) => state.color
   );
 
-  console.log(mentorSlots);
+  //console.log(mentorSlots);
   const completedSlots = mentorSlots?.filter((slot) => {
     const instance = new Date();
     return (

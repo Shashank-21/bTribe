@@ -7,7 +7,7 @@ function AdminLoginPage() {
         import.meta.env.VITE_AXIOS_BASE_URL
       }/login/google/admin`;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 

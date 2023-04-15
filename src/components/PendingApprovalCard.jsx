@@ -60,7 +60,7 @@ function PendingApprovalCard({ pendingApproval, courses, admin }) {
     setShowModal(false);
   };
   const handleRejectClick = () => {
-    console.log("rejecting user");
+    //console.log("rejecting user");
     doDeleteUser({ userId: pendingApproval._id, token: admin.token });
     const timeout = setTimeout(() => {
       doListPendingApprovalUsers(admin.token);
@@ -74,7 +74,7 @@ function PendingApprovalCard({ pendingApproval, courses, admin }) {
     }
   };
 
-  console.log(selectedCourses);
+  //console.log(selectedCourses);
 
   const handleApproveClick = () => {
     if (!selectedCourses.selectedOptions.length) {

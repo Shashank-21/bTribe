@@ -14,7 +14,7 @@ function FetchGoogleUserPage() {
 
   const loginRole = useSelector((state) => state.user.loginRole);
   const userData = useSelector((state) => state.user.data);
-  console.log(userData);
+  //console.log(userData);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);

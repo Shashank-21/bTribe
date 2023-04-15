@@ -8,7 +8,7 @@ import CheckboxInput from "./CheckboxInput";
 
 function MentorRegistrationForm({ user, role, courses }) {
   const data = user?.user;
-  console.log(role);
+  //console.log(role);
   const navigate = useNavigate();
   const [doUpdateUser, updateUserLoading, updateUserError] =
     useThunk(updateUser);
@@ -63,7 +63,7 @@ function MentorRegistrationForm({ user, role, courses }) {
     event.preventDefault();
     if (!phone.match(regExpPhone)) {
       setError(true);
-      console.log("something is wrong");
+      //console.log("something is wrong");
     } else {
       const registerData = {
         _id: data._id,
@@ -82,11 +82,11 @@ function MentorRegistrationForm({ user, role, courses }) {
       doUpdateUser(registerData);
 
       if (updateUserLoading) {
-        console.log("Updating User");
+        //console.log("Updating User");
       } else if (updateUserError) {
-        console.log("Error!");
+        //console.log("Error!");
       } else {
-        console.log("something");
+        //console.log("something");
         setTimeout(() => {
           navigate(`/dashboard/${data._id}`);
         }, 1000);

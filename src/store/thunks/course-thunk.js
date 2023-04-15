@@ -13,7 +13,7 @@ export const fetchOneCourse = createAsyncThunk(
     const response = await axios.get(
       `${import.meta.env.VITE_AXIOS_BASE_URL}/course/${slug}`
     );
-    console.log(response);
+    //console.log(response);
     return response.data;
   }
 );

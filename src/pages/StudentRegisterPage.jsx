@@ -14,7 +14,7 @@ function StudentRegisterPage() {
   const [doUpdateUser, updateUserLoading, updateUserError] =
     useThunk(updateUser);
 
-  console.log(userData);
+  //console.log(userData);
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
@@ -28,7 +28,7 @@ function StudentRegisterPage() {
         import.meta.env.VITE_AXIOS_BASE_URL
       }/login/google/student`;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
@@ -70,7 +70,7 @@ function StudentRegisterPage() {
     if (updateUserError) {
       setMessage(updateUserError);
     } else {
-      console.log("registered");
+      //console.log("registered");
       navigate("/dashboard/auth");
     }
   };

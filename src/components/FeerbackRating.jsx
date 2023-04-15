@@ -4,7 +4,7 @@ import { changeRating } from "../store";
 
 function FeedbackRating() {
   const rating = useSelector((state) => state.slots.rating);
-  console.log(rating);
+  //console.log(rating);
   const dispatch = useDispatch();
 
   const handleRatingClick = (givenRating) => {

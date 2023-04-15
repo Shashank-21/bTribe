@@ -13,7 +13,7 @@ function SlotBookingPage() {
     dateVariable.toISOString().substring(0, 10)
   );
   const slotData = useSelector((state) => state.slots);
-  console.log(slotData);
+  //console.log(slotData);
   const slots = useSelector((state) => state.slots.allSlots)?.filter(
     (slot) =>
       slot.timeRef > new Date(dateSelected).getTime() &&
@@ -23,7 +23,7 @@ function SlotBookingPage() {
   const userState = useSelector((state) => state.user);
   const mentors = userState.mentors;
   const userData = userState.data;
-  console.log(userData);
+  //console.log(userData);
 
   const mentorsAvailable = mentors
     ?.filter((mentor) => {
@@ -35,7 +35,7 @@ function SlotBookingPage() {
       });
     });
 
-  console.log(mentorsAvailable);
+  //console.log(mentorsAvailable);
 
   const [doListMentors, listMentorsLoading, listMentorsError] =
     useThunk(listMentors);
@@ -43,7 +43,7 @@ function SlotBookingPage() {
 
   useEffect(() => {
     const interval = setTimeout(() => {
-      console.log("fetching mentors");
+      //console.log("fetching mentors");
       doListMentors(userData?.token);
     });
     return () => {

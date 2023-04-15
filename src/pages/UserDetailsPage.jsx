@@ -15,7 +15,7 @@ function UserDetailsPage() {
 
   const roles = ["student", "mentor", "admin"];
   const [role, setRole] = useState(roles[0]);
-  console.log(role);
+  //console.log(role);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -31,7 +31,7 @@ function UserDetailsPage() {
     };
   }, [doFetchGoogleUser]);
 
-  console.log(userData);
+  //console.log(userData);
 
   let formToRender;
   if (role === "mentor") {

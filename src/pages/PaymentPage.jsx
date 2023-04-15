@@ -21,7 +21,7 @@ export default function PaymentPage() {
   //Create user, navitgate to register page for student
 
   const orderDetails = useSelector((state) => state.user.createdOrder);
-  console.log(orderDetails);
+  //console.log(orderDetails);
   const paymentVerified = useSelector((state) => state.user.paymentVerified);
 
   const regExpPhone = /^(\+[0-9]{1,3}-)?\(?[0-9]{3}\)?-?[0-9]{3}-?[0-9]{4}$/;

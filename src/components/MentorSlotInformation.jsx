@@ -24,7 +24,7 @@ function MentorSlotInformation({ mentor, mentorSlots, startDate, endDate }) {
       { totalRating: 0, numberRatings: 0 }
     );
 
-  console.log(mentor);
+  //console.log(mentor);
 
   return (
     <div className='flex flex-col items-center justify-around w-5/6 h-fit bg-stone-300 rounded-xl shadow-xl py-3 px-10 mt-10'>

@@ -10,7 +10,7 @@ function DashboardPage() {
   const navigate = useNavigate();
 
   const userData = useSelector((state) => state.user.data);
-  console.log(userData);
+  //console.log(userData);
 
   const [doAuthenticateUser, authenticateUserLoading, authenticateUserError] =
     useThunk(authCheck);

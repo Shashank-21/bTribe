@@ -9,7 +9,7 @@ function CourseDetailPage() {
   const { slug } = useParams();
   const [doFetchOneCourse, fetchOneCourseLoading, fetchOneCourseError] =
     useThunk(fetchOneCourse);
-  console.log(fetchOneCourseLoading, fetchOneCourseError);
+  //console.log(fetchOneCourseLoading, fetchOneCourseError);
   useEffect(() => {
     doFetchOneCourse(slug);
   }, [doFetchOneCourse, slug]);

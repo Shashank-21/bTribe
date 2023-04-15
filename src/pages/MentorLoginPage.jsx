@@ -9,7 +9,7 @@ function MentorLoginPage() {
         import.meta.env.VITE_AXIOS_BASE_URL
       }/login/google/mentor`;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 

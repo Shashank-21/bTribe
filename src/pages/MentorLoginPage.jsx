@@ -5,7 +5,9 @@ function MentorLoginPage() {
   const navigate = useNavigate();
   const handleGoogleLoginMentor = () => {
     try {
-      window.location.href = "http://localhost:8000/api/login/google/mentor";
+      window.location.href = `${
+        import.meta.env.VITE_AXIOS_BASE_URL
+      }/login/google/mentor`;
     } catch (error) {
       console.log(error);
     }

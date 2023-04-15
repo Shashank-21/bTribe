@@ -28,7 +28,9 @@ function StudentLoginPage() {
 
   const handleGoogleLoginStudent = () => {
     try {
-      window.location.href = "http://localhost:8000/api/login/google/student";
+      window.location.href = `${
+        import.meta.env.VITE_AXIOS_BASE_URL
+      }/login/google/student`;
     } catch (error) {
       console.log(error);
     }

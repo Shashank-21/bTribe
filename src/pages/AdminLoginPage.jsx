@@ -3,7 +3,9 @@ import Button from "../components/Button";
 function AdminLoginPage() {
   const handleGoogleLoginMentor = () => {
     try {
-      window.location.href = "http://localhost:8000/api/login/google/admin";
+      window.location.href = `${
+        import.meta.env.VITE_AXIOS_BASE_URL
+      }/login/google/admin`;
     } catch (error) {
       console.log(error);
     }

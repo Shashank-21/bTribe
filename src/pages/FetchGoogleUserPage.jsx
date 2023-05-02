@@ -13,7 +13,6 @@ function FetchGoogleUserPage() {
     useThunk(fetchGoogleUser);
 
   const loginRole = useSelector((state) => state.user.loginRole);
-  const userData = useSelector((state) => state.user.data);
   //console.log(userData);
 
   useEffect(() => {

@@ -12,7 +12,6 @@ function SlotBookingPage() {
   const [dateSelected, setDateSelected] = useState(
     dateVariable.toISOString().substring(0, 10)
   );
-  const slotData = useSelector((state) => state.slots);
   //console.log(slotData);
   const slots = useSelector((state) => state.slots.allSlots)?.filter(
     (slot) =>
